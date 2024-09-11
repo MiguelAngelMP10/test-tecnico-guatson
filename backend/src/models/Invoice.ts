@@ -52,13 +52,11 @@ export class Invoice extends Model {
     })
     nombreReceptor!: string;
 
-
     @Column({
         type: DataType.STRING(1),
         allowNull: false,
     })
     tipoDeComprobante!: string;
-
 
     @Column({
         type: DataType.FLOAT,
