@@ -1,15 +1,47 @@
 import {Request, Response} from 'express';
 import {install} from '@nodecfdi/cfdiutils-common';
-import {
-    DOMImplementation,
-    XMLSerializer,
-    DOMParser
-} from '@xmldom/xmldom';
-// @ts-ignore
-import {JsonConverter} from '@nodecfdi/cfdi-to-json';
-
+import {Cleaner} from '@nodecfdi/cfdi-cleaner';
+import {Comprobante} from '../types/comprobante.types';
+import {parseStringPromise, processors} from 'xml2js';
+import {DOMImplementation, DOMParser, XMLSerializer} from '@xmldom/xmldom';
+import {Invoice} from '../models/Invoice';
 import unzipper from 'unzipper';
 import {PassThrough} from 'stream';
+import {FiscalProfile} from "../models/FiscalProfile";
+
+
+const options = {
+    explicitArray: false,
+    attrkey: 'attributes',
+    tagNameProcessors: [processors.stripPrefix],
+    attrNameProcessors: [processors.stripPrefix]
+};
+
+export const getInvoices = async (req: Request, res: Response) => {
+
+    try {
+        const page = parseInt(req.query.page as string) || 1;
+        const pageSize = parseInt(req.query.pageSize as string) || 10;
+
+        const options = {
+            page,
+            paginate: pageSize,
+            order: [['createdAt', 'DESC']],
+        };
+
+        // @ts-ignore
+        const { docs, pages, total } = await Invoice.paginate(options);
+
+        res.json({
+            data: docs,
+            totalItems: total,
+            totalPages: pages,
+            currentPage: page,
+        });
+    } catch (error) {
+        res.status(500).json({message: 'Error al obtener invoices', error});
+    }
+};
 
 
 export const uploadZip = (req: Request, res: Response) => {
@@ -38,21 +70,35 @@ export const uploadZip = (req: Request, res: Response) => {
                     // Leer el contenido del archivo
                     const chunks: Buffer[] = [];
                     entry.on('data', (chunk: Buffer) => chunks.push(chunk));
-                    entry.on('end', () => {
+                    entry.on('end', async () => {
                         const fileBuffer = Buffer.concat(chunks);
                         fileContents[fileName] = fileBuffer.toString('utf8');
-
                         const xml = fileBuffer.toString('utf8');
-                        const json = JsonConverter.convertToJson(xml);
-                        console.log(json, req.body.fiscalProfileId);
+                        const resultCleaned = Cleaner.staticClean(xml);
+                        let cfdi = await parseCFDI(resultCleaned)
 
+                        let data = {
+                            'fiscalProfileId': req.body.fiscalProfileId,
+                            'uuid': cfdi?.Complemento?.TimbreFiscalDigital?.attributes.UUID,
+                            'serie': cfdi?.attributes.Serie,
+                            'folio': cfdi?.attributes.Folio,
+                            'rfcEmisor': cfdi?.Emisor.attributes.Rfc,
+                            'nombreEmisor': cfdi?.Emisor.attributes.Nombre,
+                            'rfcReceptor': cfdi?.Emisor.attributes.Rfc,
+                            'nombreReceptor': cfdi?.Emisor.attributes.Nombre,
+                            'tipoDeComprobante': cfdi?.attributes.TipoDeComprobante,
+                            'subtotal': cfdi?.attributes.SubTotal,
+                            'total': cfdi?.attributes.Total,
+                            'metodoDePago': cfdi?.attributes.MetodoPago,
+                            'formaDePago': cfdi?.attributes.FormaPago,
+                            'moneda': cfdi?.attributes.Moneda,
+                            'xml': xml
 
-
-
-
+                        };
+                        const invoice = await Invoice.create(data);
                     });
                 } else {
-                    entry.autodrain(); // Ignorar directorios
+                    entry.autodrain();
                 }
             })
             .on('finish', () => {
@@ -80,3 +126,14 @@ export const uploadZip = (req: Request, res: Response) => {
         res.status(500).send('Error al procesar el archivo ZIP.');
     }
 };
+
+
+async function parseCFDI(xmlString: string): Promise<Comprobante | undefined> {
+    try {
+        const result = await parseStringPromise(xmlString, options) as { Comprobante: Comprobante };
+        return result.Comprobante;
+    } catch (error) {
+        console.error('Error al parsear el XML:', error);
+        return undefined;
+    }
+}
