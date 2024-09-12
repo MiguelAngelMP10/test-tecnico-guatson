@@ -1,21 +1,11 @@
 import {Request, Response} from 'express';
 import {install} from '@nodecfdi/cfdiutils-common';
 import {Cleaner} from '@nodecfdi/cfdi-cleaner';
-import {Comprobante} from '../types/comprobante.types';
-import {parseStringPromise, processors} from 'xml2js';
 import {DOMImplementation, DOMParser, XMLSerializer} from '@xmldom/xmldom';
 import {Invoice} from '../models/Invoice';
 import unzipper from 'unzipper';
 import {PassThrough} from 'stream';
-import {FiscalProfile} from "../models/FiscalProfile";
-
-
-const options = {
-    explicitArray: false,
-    attrkey: 'attributes',
-    tagNameProcessors: [processors.stripPrefix],
-    attrNameProcessors: [processors.stripPrefix]
-};
+import {parseCFDI} from "../helpers/ParseCFDI"
 
 export const getInvoices = async (req: Request, res: Response) => {
 
@@ -30,7 +20,7 @@ export const getInvoices = async (req: Request, res: Response) => {
         };
 
         // @ts-ignore
-        const { docs, pages, total } = await Invoice.paginate(options);
+        const {docs, pages, total} = await Invoice.paginate(options);
 
         res.json({
             data: docs,
@@ -120,7 +110,6 @@ export const uploadZip = (req: Request, res: Response) => {
                 res.status(500).send('Error al procesar el archivo ZIP.');
             });
 
-
     } catch (error) {
         console.error('Error al procesar el archivo ZIP:', error);
         res.status(500).send('Error al procesar el archivo ZIP.');
@@ -128,12 +117,3 @@ export const uploadZip = (req: Request, res: Response) => {
 };
 
 
-async function parseCFDI(xmlString: string): Promise<Comprobante | undefined> {
-    try {
-        const result = await parseStringPromise(xmlString, options) as { Comprobante: Comprobante };
-        return result.Comprobante;
-    } catch (error) {
-        console.error('Error al parsear el XML:', error);
-        return undefined;
-    }
-}

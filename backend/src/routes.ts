@@ -15,6 +15,6 @@ router.get('/perfiles', getProfiles);
 router.post('/perfiles', createProfile);
 router.get('/facturas', getInvoices);
 router.post('/facturas', upload.single('zipFile'), uploadZip);
-router.get('/iva-calculo', ivaCalculation);
+router.get('/iva-calculo/:id', ivaCalculation);
 
 export default router;
