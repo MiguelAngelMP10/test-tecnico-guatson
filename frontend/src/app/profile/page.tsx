@@ -1,6 +1,8 @@
 'use client'
 
 import {useState, useEffect} from 'react'
+import Link from 'next/link'
+
 
 interface Perfil {
     id: string;
@@ -43,6 +45,10 @@ export default function Page() {
         <div className="container mx-auto p-6">
 
             <h1 className="text-2xl text-center my-7">Lista de Perfiles</h1>
+            <Link href="/profile/create" type="button"
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
+                Create profile
+            </Link>
             <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -54,6 +60,7 @@ export default function Page() {
                                     <th scope="col" className="px-6 py-4">RFC</th>
                                     <th scope="col" className="px-6 py-4">Commercial Name</th>
                                     <th scope="col" className="px-6 py-4">Regimen Code</th>
+                                    <th scope="col" className="px-6 py-4">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -64,7 +71,12 @@ export default function Page() {
                                         <td className="whitespace-nowrap px-6 py-4">{perfil.rfc}</td>
                                         <td className="whitespace-nowrap px-6 py-4">{perfil.commercialName}</td>
                                         <td className="whitespace-nowrap px-6 py-4">{perfil.taxRegimeCode}</td>
-
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <Link href={`/invoices/upload/${perfil.id}`} type="button"
+                                                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                                                Upload invoices
+                                            </Link>
+                                        </td>
                                     </tr>
                                 ))}
                                 </tbody>

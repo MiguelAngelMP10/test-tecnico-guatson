@@ -10,7 +10,6 @@ const Menu = () => {
                     </Link>
                 </div>
                 <ul className="flex space-x-4">
-
                     <li>
                         <Link href="/profile" className="hover:text-gray-400">
                             Profile
