@@ -24,7 +24,7 @@ export const ivaCalculation = async (req: Request, res: Response) => {
         const ivaEmitido = await calcularIVAEmitido(fiscalProfile.invoices);
         const ivaRecibido = await calcularIVARecibido(fiscalProfile.invoices);
 
-        res.json({ivaEmitido, ivaRecibido});
+        res.json({ivaEmitido, ivaRecibido, saldoFinalIva: ivaEmitido - ivaRecibido});
     } catch (error) {
         res.status(500).json({message: 'Error del servidor', error});
     }
@@ -57,7 +57,7 @@ const calcularIVARecibido = async (facturasRecibidas: any[]): Promise<number> =>
         const cfdi = await parseCFDI(factura.xml);
 
         // Verificar que el tipo de comprobante sea 'I' (Ingreso) o 'E' (Egreso)
-        if (['E', 'I', ].includes(<string>cfdi?.attributes.TipoDeComprobante) && Array.isArray(cfdi?.Impuestos?.Traslados?.Traslado)) {
+        if (['E', 'I',].includes(<string>cfdi?.attributes.TipoDeComprobante) && Array.isArray(cfdi?.Impuestos?.Traslados?.Traslado)) {
             cfdi?.Impuestos.Traslados.Traslado.forEach((traslado: Traslado) => {
                 if (traslado.attributes.Impuesto === '002' && traslado.attributes.TipoFactor === 'Tasa') {
                     ivaARecuperar += parseFloat(traslado.attributes.Importe);
