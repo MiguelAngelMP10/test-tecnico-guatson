@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-const page = ({ params }: { params: { id: string } }) => {
+const Page = ({ params }: { params: { id: string } }) => {
 
 
     const [file, setFile] = useState<File | null>(null);
-    const [fiscalProfileId, setFiscalProfileId] = useState('');
     const [fileName, setFileName] = useState('Selecciona un archivo ZIP');
 
 
@@ -76,4 +75,4 @@ const page = ({ params }: { params: { id: string } }) => {
     );
 };
 
-export default page;
+export default Page;

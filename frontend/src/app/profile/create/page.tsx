@@ -1,5 +1,5 @@
 'use client'
-import {useState} from 'react'
+import React, {useState} from 'react'
 
 const CreateProfile = () => {
     const [rfc, setRfc] = useState('');
@@ -25,6 +25,7 @@ const CreateProfile = () => {
 
             if (response.ok) {
                 const result = await response.json();
+                console.log(result)
                 setMessage('Registro creado con éxito');
             } else {
                 setMessage('Error al crear el registro');

@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from 'react'
 
-const page = ({params}: { params: { id: string } }) => {
+const Page = ({params}: { params: { id: string } }) => {
 
     interface invoice {
         id: string;
@@ -141,4 +141,4 @@ const page = ({params}: { params: { id: string } }) => {
 }
 
 
-export default page;
+export default Page;

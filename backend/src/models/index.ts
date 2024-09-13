@@ -4,12 +4,13 @@ import {FiscalProfile} from './FiscalProfile';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
 export const sequelize = new Sequelize({
     dialect: process.env.DB_DIALECT as any,
     host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
     port: Number(process.env.DB_PORT),
     models: [FiscalProfile, Invoice],
 });
