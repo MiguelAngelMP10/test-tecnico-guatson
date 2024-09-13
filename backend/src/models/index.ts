@@ -1,15 +1,17 @@
 import {Sequelize} from 'sequelize-typescript';
 import {Invoice} from './Invoice';
 import {FiscalProfile} from './FiscalProfile';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 export const sequelize = new Sequelize({
-    dialect: 'mysql',
-    host: 'localhost',
-    database: 'test_tecnico_guatson',
-    username: 'root',
-    password: '159753',
-    port: 3306,
-    models: [FiscalProfile, Invoice],  // Agregamos los modelos
+    dialect: process.env.DB_DIALECT as any,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT),
+    models: [FiscalProfile, Invoice],
 });
 
 // Sincronizar los modelos con la base de datos

@@ -3,6 +3,10 @@ import cors from 'cors';
 import routes from "./routes";
 import {connectDB} from './models';
 
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
