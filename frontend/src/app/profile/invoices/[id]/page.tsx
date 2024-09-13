@@ -85,7 +85,7 @@ const page = ({params}: { params: { id: string } }) => {
             <div className="grid grid-cols-3 gap-4">
                 <div className="bg-blue-500 p-4">IVA adeudado: $ {ivaCalculo?.ivaEmitido}</div>
                 <div className="bg-green-500 p-4">IVA a recuperar: $ {ivaCalculo?.ivaRecibido}</div>
-                <div className="bg-red-500 p-4"> IVA a recuperar: $ {ivaCalculo?.saldoFinalIva}</div>
+                <div className="bg-red-500 p-4">Saldo final: $ {ivaCalculo?.saldoFinalIva}</div>
             </div>
 
 
