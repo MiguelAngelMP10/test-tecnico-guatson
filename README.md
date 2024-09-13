@@ -1,5 +1,11 @@
 # test-tecnico-guatson
 
+# Frontend
+
+La Url para intereactuar con el frontend se encuentra en 
+
+http://ec2-3-135-224-4.us-east-2.compute.amazonaws.com](http://ec2-3-135-224-4.us-east-2.compute.amazonaws.com)
+
 
 # Backend
 # Documentación de la API
@@ -16,7 +22,7 @@ Este documento proporciona información sobre los endpoints de la API incluidos 
 - **Endpoint**: `/api/v1/perfiles`
 - **Método**: `GET`
 - **Descripción**: Recupera la lista de perfiles.
-- **URL**: [http://ec2-3-135-224-4.us-east-2.compute.amazonaws.com/api/v1/perfiles](http://localhost:3001/api/v1/perfiles)
+- **URL**: [http://ec2-3-135-224-4.us-east-2.compute.amazonaws.com/api/v1/perfiles](http://ec2-3-135-224-4.us-east-2.compute.amazonaws.com/api/v1/perfiles)
 
 ### 2. Cálculo de IVA (GET)
 
