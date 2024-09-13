@@ -76,6 +76,10 @@ export default function Page() {
                                                   className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
                                                 Upload invoices
                                             </Link>
+                                            <Link href={`/profile/invoices/${perfil.id}`} type="button"
+                                                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                Invoices
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}
@@ -85,10 +89,6 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            <ul>
-
-
-            </ul>
         </div>
 
     );
