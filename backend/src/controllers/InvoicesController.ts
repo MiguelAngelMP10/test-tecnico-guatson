@@ -17,6 +17,7 @@ export const getInvoices = async (req: Request, res: Response) => {
             page,
             paginate: pageSize,
             order: [['createdAt', 'DESC']],
+            where: {fiscalProfileId: req.query.fiscalProfileId},
         };
 
         // @ts-ignore
