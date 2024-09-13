@@ -18,6 +18,8 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 
         if (!file) {
             alert('Por favor sube el archivo ZIP y proporciona el fiscalProfileId');
@@ -30,7 +32,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         formData.append('fiscalProfileId', params.id);
         try {
             // Realizar la solicitud POST usando axios o fetch
-            const response = await axios.post('http://localhost:3001/api/v1/facturas', formData, {
+            const response = await axios.post(`${apiUrl}/api/v1/facturas`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

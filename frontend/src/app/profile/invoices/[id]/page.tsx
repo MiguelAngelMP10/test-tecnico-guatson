@@ -35,11 +35,13 @@ const Page = ({params}: { params: { id: string } }) => {
     const [ivaCalculo, setIvaCalculo] = useState<ivaCalculo | undefined>()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 
     useEffect(() => {
         const fetchInvoices = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/v1/facturas?page=1&pageSize=1000&fiscalProfileId=${params.id}`);
+                const response = await fetch(`${apiUrl}/api/v1/facturas?page=1&pageSize=1000&fiscalProfileId=${params.id}`);
                 if (!response.ok) {
                     throw new Error('Error en la solicitud');
                 }
@@ -58,7 +60,7 @@ const Page = ({params}: { params: { id: string } }) => {
     useEffect(() => {
         const fetchIvaCalculo = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/v1/iva-calculo/${params.id}`);
+                const response = await fetch(`${apiUrl}/api/v1/iva-calculo/${params.id}`);
                 if (!response.ok) {
                     throw new Error('Error en la solicitud');
                 }

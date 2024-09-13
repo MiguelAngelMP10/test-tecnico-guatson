@@ -18,11 +18,12 @@ export default function Page() {
     const [perfiles, setPerfiles] = useState<Perfil[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
         const fetchPerfiles = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/v1/perfiles');
+                const response = await fetch(`${apiUrl}/api/v1/perfiles`);
                 if (!response.ok) {
                     throw new Error('Error en la solicitud');
                 }

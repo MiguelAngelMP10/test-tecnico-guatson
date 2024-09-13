@@ -9,9 +9,11 @@ const CreateProfile = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 
         try {
-            const response = await fetch('http://localhost:3001/api/v1/perfiles', {
+            const response = await fetch(`${apiUrl}/api/v1/perfiles`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
